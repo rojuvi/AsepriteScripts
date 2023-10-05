@@ -58,6 +58,7 @@ local function exportLayers(sprite, root_layer, filename, group_sep, data)
                     listLayers=layer,
                     listTags=true,
                     listSlices=true,
+                    ignoreEmpty=true,
                 }
             else
                 sprite:saveCopyAs(filename)
@@ -90,14 +91,14 @@ dlg:combobox{
 dlg:combobox{
     id = 'group_sep',
     label = 'Group separator:',
-    option = Sep,
+    option = '_',
     options = {Sep, '-', '_'}
 }
 dlg:slider{id = 'scale', label = 'Export Scale:', min = 1, max = 10, value = 1}
 dlg:check{
     id = "spritesheet",
     label = "Export as spritesheet:",
-    selected = false,
+    selected = true,
     onclick = function()
         -- Show this options only if spritesheet is checked.
         dlg:modify{
@@ -114,13 +115,13 @@ dlg:check{
     id = "trim",
     label = "  Trim:",
     selected = false,
-    visible = false
+    visible = true
 }
 dlg:check{
     id = "mergeDuplicates",
     label = "  Merge duplicates:",
-    selected = false,
-    visible = false
+    selected = true,
+    visible = true
 }
 dlg:check{id = "save", label = "Save sprite:", selected = false}
 dlg:button{id = "ok", text = "Export"}
