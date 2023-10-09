@@ -80,7 +80,7 @@ dlg:file{
 dlg:entry{
     id = "filename",
     label = "File name format:",
-    text = "{layergroups}{layername}"
+    text = RemoveExtension(Basename(Sprite.filename)) .. Sep .. "{layergroups}{layername}"
 }
 dlg:combobox{
     id = 'format',
