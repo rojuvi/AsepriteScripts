@@ -46,7 +46,7 @@ local function exportLayers(sprite, root_layer, filename, group_sep, data)
                     dataFilename="",
                     dataFormat=SpriteSheetDataFormat.JSON_HASH,
                     borderPadding=0,
-                    shapePadding=0,
+                    shapePadding=data.shapePadding,
                     innerPadding=0,
                     trim=data.trim,
                     mergeDuplicates=data.mergeDuplicates,
@@ -109,6 +109,10 @@ dlg:check{
             id = "mergeDuplicates",
             visible = dlg.data.spritesheet
         }
+        dlg:modify{
+            id = "shapePadding",
+            visible = dlg.data.spritesheet
+        }
     end
 }
 dlg:check{
@@ -120,6 +124,12 @@ dlg:check{
 dlg:check{
     id = "mergeDuplicates",
     label = "  Merge duplicates:",
+    selected = true,
+    visible = true
+}
+dlg:check{
+    id = "shapePadding",
+    label = "  Spacing:",
     selected = true,
     visible = true
 }
