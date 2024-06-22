@@ -127,11 +127,12 @@ dlg:check{
     selected = true,
     visible = true
 }
-dlg:check{
+dlg:slider{
     id = "shapePadding",
     label = "  Spacing:",
-    selected = true,
-    visible = true
+    min = 1, 
+    max = 10, 
+    value = 1
 }
 dlg:check{id = "save", label = "Save sprite:", selected = false}
 dlg:button{id = "ok", text = "Export"}
