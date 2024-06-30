@@ -118,7 +118,7 @@ dlg:check{
 dlg:check{
     id = "trim",
     label = "  Trim:",
-    selected = false,
+    selected = true,
     visible = true
 }
 dlg:check{
