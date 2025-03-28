@@ -20,10 +20,14 @@ if err ~= 0 then return err end
 -- Variable to keep track of number of current combination.
 local combination = 0
 
-local function exportCombinations(sprite, g, output_path)
+local function exportCombinations(sprite, g, output_path, combo_layer_names)
     if #g == 0 then
         os.execute("mkdir \"" .. Dirname(output_path) .. "\"")
-        sprite:saveCopyAs(output_path:gsub("{combination}", combination))
+        local combination_layers = combo_layer_names[1]
+        for i=2, #combo_layer_names do
+            combination_layers = combination_layers .. "_" .. combo_layer_names[i]
+        end
+        sprite:saveCopyAs(output_path:gsub("{combination}", combination):gsub("{combination_layers}", combination_layers))
         combination = combination + 1
         return
     end
@@ -40,7 +44,9 @@ local function exportCombinations(sprite, g, output_path)
     table.remove(groups, 1)
     for _, layer in ipairs(changing_group.layers) do
         layer.isVisible = true
-        exportCombinations(sprite, groups, output_path)
+        local layer_names = CopyTable(combo_layer_names)
+        table.insert(layer_names, layer.name)
+        exportCombinations(sprite, groups, output_path, layer_names)
         layer.isVisible = false
     end
 end
@@ -56,7 +62,7 @@ dlg:file{
 dlg:entry{
     id = "filename",
     label = "File name format:",
-    text = "{spritename}_{combination}"
+    text = "{spritename}_{combination_layers}"
 }
 dlg:combobox{
     id = 'format',
@@ -82,9 +88,9 @@ if output_path == nil then
     return 1
 end
 
-if not string.find(filename, "{combination}") then
+if not string.find(filename, "{combination}") and not string.find(filename, "combination_layers") then
     -- combination format is mandatory. Append to string.
-    filename = filename .. "_{combination}"
+    filename = filename .. "_{combination_layers}"
 end
 
 filename = filename:gsub("{spritename}",
@@ -95,7 +101,7 @@ filename = filename .. '.' .. dlg.data.format
 -- Finally, perform everything.
 Sprite:resize(Sprite.width * dlg.data.scale, Sprite.height * dlg.data.scale)
 local layers_visibility_data = HideLayers(Sprite)
-exportCombinations(Sprite, Sprite.layers, output_path .. filename)
+exportCombinations(Sprite, Sprite.layers, output_path .. filename, {})
 RestoreLayersVisibility(Sprite, layers_visibility_data)
 Sprite:resize(Sprite.width / dlg.data.scale, Sprite.height / dlg.data.scale)
 
